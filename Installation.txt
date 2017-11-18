@@ -1,0 +1,58 @@
+Game Used:GTA-SA
+
+Install:
+1.Download the setup.
+2.Install
+3.Search for cracked gta_sa.exe in Downloaded folder, copy it to installed dir.
+4.Download DirectX9 
+5.Run
+
+
+List of Mods successfully installed to the game:
+
+1.d3d9.dll				- To run the game in windowed mode.
+http://gtaforums.com/topic/728230-gta-sa-windowed-mode-impossible/
+
+2.CLEO					- To install CLEO Mods
+https://www.gta-modding.com/san_andreas/tutorials/install_cleo_mods.html
+
+3.GTA_SA_Car_Spawner_2_1- To spawn cars.
+http://www.gtainside.com/en/sanandreas/mods/40507-car-spawner-v2-1/
+
+4.100% Complete Save File
+http://www.gtainside.com/en/sanandreas/savegames/76731-save-game-100/download/
+
+5.Real Roads Mod
+http://www.gtainside.com/en/sanandreas/mods/81630-hd-all-city-road
+
+6.Handling Mod
+http://www.gtagarage.com/mods/show.php?id=28760
+
+7.Frame Rate
+http://www.gtainside.com/en/sanandreas/mods/82011-fps-counter/download/
+
+8.Speed Limit 
+http://www.gtasa.com.br/2013/11/speed-limiter-velocidade-controlada.html
+
+
+9.Tesla Model S
+http://www.gtainside.com/sanandreas/cars/65517-2014-tesla-model-s/
+
+
+10.Perfect weather
+http://www.gtainside.com/en/sanandreas/mods/61429-perfect-weather-pack/
+
+11.Weather Control 
+https://www.gtaall.com/gta-san-andreas/cleo/20896-vybor-lyuboy-pogody.html
+
+12.Day to Night
+http://www.gtainside.com/en/sanandreas/mods/55118-day-to-night
+
+--13.Lock Car Doors
+http://www.gtainside.com/en/sanandreas/mods/111966-lock-car-doors-mod/
+
+14.Divine Ride
+http://www.gtainside.com/en/sanandreas/mods/80400-super-vehicles-divine-ride-mod/
+
+15.Teleport Mod
+http://www.gtainside.com/en/sanandreas/mods/34560-teleport/
