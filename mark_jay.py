@@ -4,7 +4,6 @@ import cv2
 import numpy as np
 import os
 from Driver.create_training_data import keys_to_output
-from Driver.directkeys import PressKey, ReleaseKey, W, S, A, D
 from Driver.getkeys import key_check
 from Driver.grabscreen import grab_screen
 
@@ -25,10 +24,6 @@ LEFT = 0x1E
 # VERTICES = np.array([[0, 430], [50, 300], [470, 400], [620, 430], [600, 480], [0, 480]])
 VERTICES = np.array([[0, 300], [620, 300], [640, 400], [0, 400]])
 
-for i in range(3, 0, -1):
-    time.sleep(.4)
-    print(i)
-
 
 def roi(img, vertices):
     mask = np.zeros_like(img)
@@ -46,28 +41,30 @@ def process_img(original_img):
 
 
 def main():
+    for i in list(range(4))[::-1]:
+        print(i + 1)
+        time.sleep(2)
+
+    file_name = 'training_data.npy'
+    print('Starting...')
+    if os.path.isfile(file_name):
+        training_data = list(np.load(file_name))
+        # m = np.array([x[:5] for x in training_data], dtype=object)
+        # print(m)
+
+    else:
+        print('File does not exist, starting fresh!')
+        training_data = []
+
     while True:
-        file_name = 'training_data.npy'
-        print('Starting...')
-        if os.path.isfile(file_name):
-            training_data = list(np.load(file_name))
-            m = np.array([x[:5] for x in training_data], dtype=object)
-            print(m)
-
-        else:
-            print('File does not exist, starting fresh!')
-            training_data = []
-
-        for i in list(range(4))[::-1]:
-            print(i + 1)
-            time.sleep(2)
-
         screen = grab_screen(region=BOX)
         screen = process_img(screen)
         cv2.imshow('Car Vision', screen)
         screen = grab_screen(region=BOX)
         keys = key_check()
         output = keys_to_output(keys)
+        print(len(screen))
+        print(keys)
         training_data.append([screen, output])
 
         if len(training_data) % 200 == 0:
@@ -78,4 +75,4 @@ def main():
             cv2.destroyAllWindows()
             break
 
-    main()
+main()

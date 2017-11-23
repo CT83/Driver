@@ -33,9 +33,7 @@ def keys_to_output(keys):
 def process_img(original_img):
     processed_img = cv2.Canny(original_img, threshold1=100, threshold2=300)
     processed_img = roi(processed_img, [VERTICES])
-    # cv2.imshow('Car Vision', processed_img)
     processed_img = cv2.GaussianBlur(processed_img, (5, 5), 1)
-    #processed_img = cv2.resize(processed_img, (60, 60))
     return processed_img
 
 
@@ -47,7 +45,7 @@ def roi(img, vertices):
 
 
 def main():
-    file_name = 'training_data.npy'
+    file_name = 'training_data1.npy'
 
     if os.path.isfile(file_name):
         print('File exists, loading previous data!')
@@ -69,7 +67,7 @@ def main():
             cv2.imshow('Car Vision', screen)
             keys = key_check()
             output = keys_to_output(keys)
-            training_data.append([screen, output])
+            training_data.append([screen, keys])
 
             if len(training_data) % 200 == 0:
                 print(len(training_data))
@@ -87,34 +85,3 @@ def main():
                 time.sleep(1)
 
 
-main()
-
-
-
-
-# def straight():
-#     PressKey(W)
-#     ReleaseKey(A)
-#     ReleaseKey(D)
-#     ReleaseKey(S)
-#
-#
-# def left():
-#     if random.randrange(0, 3) == 1:
-#         PressKey(W)
-#     else:
-#         ReleaseKey(W)
-#     PressKey(A)
-#     ReleaseKey(S)
-#     ReleaseKey(D)
-#
-#
-# def right():
-#     if random.randrange(0, 3) == 1:
-#         PressKey(W)
-#     else:
-#         ReleaseKey(W)
-#     PressKey(D)
-#     ReleaseKey(A)
-#     ReleaseKey(S)
-#
