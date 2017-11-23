@@ -1,13 +1,12 @@
-import cv2
-from directkeys import PressKey, ReleaseKey
-from grabscreen import grab_screen
-import numpy as np
-import pyautogui
-from sklearn.cluster import KMeans
-import threading
 import time
-from directkeys import PressKey, ReleaseKey, W, A, S, D
-import random
+
+import cv2
+import numpy as np
+import os
+from Driver.create_training_data import keys_to_output
+from Driver.directkeys import PressKey, ReleaseKey, W, S, A, D
+from Driver.getkeys import key_check
+from Driver.grabscreen import grab_screen
 
 uhd_x = 646
 uhd_y = 509
@@ -24,45 +23,11 @@ RIGHT = 0x20
 LEFT = 0x1E
 
 # VERTICES = np.array([[0, 430], [50, 300], [470, 400], [620, 430], [600, 480], [0, 480]])
-VERTICES = np.array([[0, 300], [620, 300], [640, 500], [0, 500]])
+VERTICES = np.array([[0, 300], [620, 300], [640, 400], [0, 400]])
 
 for i in range(3, 0, -1):
     time.sleep(.4)
     print(i)
-
-
-def t_key(key_a, key_b, key_c):
-    PressKey(key_a)
-    ReleaseKey(key_b)
-    ReleaseKey(key_c)
-    time.sleep(keytime)
-
-
-def straight():
-    PressKey(W)
-    ReleaseKey(A)
-    ReleaseKey(D)
-    ReleaseKey(S)
-
-
-def left():
-    if random.randrange(0, 3) == 1:
-        PressKey(W)
-    else:
-        ReleaseKey(W)
-    PressKey(A)
-    ReleaseKey(S)
-    ReleaseKey(D)
-
-
-def right():
-    if random.randrange(0, 3) == 1:
-        PressKey(W)
-    else:
-        ReleaseKey(W)
-    PressKey(D)
-    ReleaseKey(A)
-    ReleaseKey(S)
 
 
 def roi(img, vertices):
@@ -73,42 +38,44 @@ def roi(img, vertices):
 
 
 def process_img(original_img):
-    processed_img = cv2.Canny(original_img,
-                              threshold1=100, threshold2=300)
+    processed_img = cv2.Canny(original_img, threshold1=100, threshold2=300)
     processed_img = roi(processed_img, [VERTICES])
-    processed_img = cv2.GaussianBlur(processed_img, (5, 5), 0)
-    processed_img = cv2.resize(processed_img, (160, 120))
-    # cv2.imshow('window2', processed_img)
-    try:
-        img = processed_img
-        lines = cv2.HoughLinesP(img, 1,
-                                np.pi / 180, 50, np.array([]), 1, 80)
-        for x in range(0, len(lines)):
-            for x1, y1, x2, y2 in lines[x]:
-                cv2.line(img, (x1, y1), (x2, y2), (255, 255, 255), 1)
-
-        cv2.imshow('hough', img)
-
-    except Exception as e:
-        print(e)
-
+    processed_img = cv2.GaussianBlur(processed_img, (5, 5), 1)
+    processed_img = cv2.resize(processed_img, (60, 60))
     return processed_img
 
 
 def main():
     while True:
-        ti = time.time()
+        file_name = 'training_data.npy'
+        print('Starting...')
+        if os.path.isfile(file_name):
+            training_data = list(np.load(file_name))
+            m = np.array([x[:5] for x in training_data], dtype=object)
+            print(m)
+
+        else:
+            print('File does not exist, starting fresh!')
+            training_data = []
+
+        for i in list(range(4))[::-1]:
+            print(i + 1)
+            time.sleep(2)
+
         screen = grab_screen(region=BOX)
-        # cv2.imshow('window', cv2.cvtColor(screen,
-        # cv2.COLOR_BGR2RGB))
+        screen = process_img(screen)
+        cv2.imshow('Car Vision', screen)
+        screen = grab_screen(region=BOX)
+        keys = key_check()
+        output = keys_to_output(keys)
+        training_data.append([screen, output])
 
-        new_screen = process_img(screen)
+        if len(training_data) % 200 == 0:
+            print(len(training_data))
+            np.save(file_name, training_data)
 
-        print('{:.2f} FPS'.format(1 / (time.time() - ti)))
         if cv2.waitKey(25) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
             break
 
-
-if __name__ == '__main__':
     main()
