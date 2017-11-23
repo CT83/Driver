@@ -45,7 +45,9 @@ def main():
         print(i + 1)
         time.sleep(2)
 
-    file_name = 'training_data.npy'
+    # file_name = 'training_data.npy'
+    session = time.strftime('%Y_%m_%d %H_%M_%S', time.localtime(time.time()))
+    file_name = session
     print('Starting...')
     if os.path.isfile(file_name):
         training_data = list(np.load(file_name))
@@ -60,19 +62,21 @@ def main():
         screen = grab_screen(region=BOX)
         screen = process_img(screen)
         cv2.imshow('Car Vision', screen)
-        screen = grab_screen(region=BOX)
         keys = key_check()
         output = keys_to_output(keys)
-        print(len(screen))
-        print(keys)
+        # print(len(screen))
+        # print(keys)
         training_data.append([screen, output])
 
         if len(training_data) % 200 == 0:
+            file_name = session + "_" + (str(len(training_data)))
+            print("Saved to " + file_name)
             print(len(training_data))
             np.save(file_name, training_data)
 
         if cv2.waitKey(25) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
             break
+
 
 main()

@@ -9,11 +9,11 @@ import os
 
 
 def keys_to_output(keys):
-    '''
+    """
     Convert keys to a ...multi-hot... array
 
     [A,W,D] boolean values.
-    '''
+    """
     output = [0, 0, 0]
 
     if 'A' in keys:
@@ -67,4 +67,3 @@ def main():
                 print('Pausing!')
                 paused = True
                 time.sleep(1)
-
