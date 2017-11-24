@@ -23,6 +23,7 @@ LEFT = 0x1E
 
 # VERTICES = np.array([[0, 430], [50, 300], [470, 400], [620, 430], [600, 480], [0, 480]])
 VERTICES = np.array([[0, 300], [620, 300], [640, 400], [0, 400]])
+keys_to_record = {'W', 'A', 'S', 'D'}
 
 
 def roi(img, vertices):
@@ -40,23 +41,27 @@ def process_img(original_img):
     return processed_img
 
 
+def display_stats():
+    pass
+
+
+def is_controls(keys):
+    if set(keys_to_record) & set(keys):
+        return True
+    else:
+        return False
+
+
 def main():
     for i in list(range(4))[::-1]:
         print(i + 1)
         time.sleep(2)
 
     # file_name = 'training_data.npy'
-    session = time.strftime('%Y_%m_%d %H_%M_%S', time.localtime(time.time()))
-    file_name = session
+    file_name = time.strftime('%Y_%m_%d %H_%M_%S', time.localtime(time.time()))
+    file_name = 'F:/' + file_name
     print('Starting...')
-    if os.path.isfile(file_name):
-        training_data = list(np.load(file_name))
-        # m = np.array([x[:5] for x in training_data], dtype=object)
-        # print(m)
-
-    else:
-        print('File does not exist, starting fresh!')
-        training_data = []
+    training_data = []
 
     while True:
         screen = grab_screen(region=BOX)
@@ -64,13 +69,12 @@ def main():
         cv2.imshow('Car Vision', screen)
         keys = key_check()
         output = keys_to_output(keys)
-        # print(len(screen))
-        # print(keys)
-        training_data.append([screen, output])
+        if is_controls(keys):
+            training_data.append([screen, output])
 
-        if len(training_data) % 200 == 0:
-            file_name = session + "_" + (str(len(training_data)))
-            print("Saved to " + file_name)
+        if len(training_data) % 200 == 0 and len(training_data) != 0:
+            file_name = file_name + "_" + (str(len(training_data)))
+            print("Saving to " + file_name)
             print(len(training_data))
             np.save(file_name, training_data)
 
