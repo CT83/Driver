@@ -9,7 +9,6 @@ from Driver.grabscreen import grab_screen
 
 BOX = (10, 25, 646, 509)
 
-
 # VERTICES = np.array([[0, 430], [50, 300], [470, 400], [620, 430], [600, 480], [0, 480]])
 VERTICES = np.array([[0, 300], [620, 300], [640, 400], [0, 400]])
 keys_to_record = {'W', 'A', 'S', 'D'}
@@ -47,6 +46,15 @@ def wait_for(sleep_for, delay):
         time.sleep(delay)
 
 
+def get_file_size(file_name):
+    import os.path
+    try:
+        return str(os.path.getsize(file_name) >> 20)
+    except os.error as e:
+        print(e)
+        return ""
+
+
 def main():
     print('Starting...')
     wait_for(4, delay=2)
@@ -61,11 +69,14 @@ def main():
         if is_controls(keys):
             training_data.append([screen, output])
 
-        if len(training_data) % 200 == 0 and len(training_data) != 0:
+        if len(training_data) % 10000 == 0 and len(training_data) != 0 or 'P' in keys:
             file_name = file_name + "_" + (str(len(training_data)))
-            print("Saving to " + file_name)
-            print(len(training_data))
-            np.save(file_name, training_data)
+            np.save(file_name + '.npy', training_data)
+            file_size = get_file_size(file_name + '.npy')
+            print(str(len(training_data))
+                  + "- Saving to " + file_name + '.npy' +
+                  ' File Size:' + file_size+" MB"
+                  )
 
         if cv2.waitKey(25) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
