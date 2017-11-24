@@ -2,24 +2,13 @@ import time
 
 import cv2
 import numpy as np
-import os
+
 from Driver.create_training_data import keys_to_output
 from Driver.getkeys import key_check
 from Driver.grabscreen import grab_screen
 
-uhd_x = 646
-uhd_y = 509
-# BOX = (uhd_x, uhd_y, uhd_x + 800, uhd_y + 600)
 BOX = (10, 25, 646, 509)
 
-hood_y = 410
-horizon_y = 260
-side_y = 50
-keytime = 0.1
-
-STRAIGHT = 0x11
-RIGHT = 0x20
-LEFT = 0x1E
 
 # VERTICES = np.array([[0, 430], [50, 300], [470, 400], [620, 430], [600, 480], [0, 480]])
 VERTICES = np.array([[0, 300], [620, 300], [640, 400], [0, 400]])
@@ -52,17 +41,17 @@ def is_controls(keys):
         return False
 
 
-def main():
-    for i in list(range(4))[::-1]:
+def wait_for(sleep_for, delay):
+    for i in list(range(sleep_for))[::-1]:
         print(i + 1)
-        time.sleep(2)
+        time.sleep(delay)
 
-    # file_name = 'training_data.npy'
-    file_name = time.strftime('%Y_%m_%d %H_%M_%S', time.localtime(time.time()))
-    file_name = 'F:/' + file_name
+
+def main():
     print('Starting...')
+    wait_for(4, delay=2)
+    file_name = 'F:/' + time.strftime('%Y_%m_%d %H_%M_%S', time.localtime(time.time()))
     training_data = []
-
     while True:
         screen = grab_screen(region=BOX)
         screen = process_img(screen)
