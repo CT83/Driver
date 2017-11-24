@@ -11,7 +11,7 @@ BOX = (10, 25, 646, 509)
 
 # VERTICES = np.array([[0, 430], [50, 300], [470, 400], [620, 430], [600, 480], [0, 480]])
 VERTICES = np.array([[0, 300], [620, 300], [640, 400], [0, 400]])
-keys_to_record = {'W', 'A', 'S', 'D'}
+keys_to_record = {'W', 'A', 'D'}
 
 
 def roi(img, vertices):
@@ -29,8 +29,28 @@ def process_img(original_img):
     return processed_img
 
 
-def display_stats():
-    pass
+def display_stats(training_data):
+    lefts = []
+    rights = []
+    forwards = []
+    for data in training_data:
+        img = data[0]
+        choice = data[1]
+
+        if choice == [1, 0, 0]:
+            lefts.append([img, choice])
+        elif choice == [0, 1, 0]:
+            forwards.append([img, choice])
+        elif choice == [0, 0, 1]:
+            rights.append([img, choice])
+    print(str(len(data[1])))
+    print('Forwards : ' + str(len(forwards)))
+    print('Lefts    :' + str(len(lefts)))
+    print('Rights   :' + str(len(rights)))
+    # forwards = forwards[:len(lefts)][:len(rights)]
+    # lefts = lefts[:len(forwards)]
+    # rights = rights[:len(forwards)]
+    # final_data = forwards + lefts + rights
 
 
 def is_controls(keys):
@@ -70,12 +90,13 @@ def main():
             training_data.append([screen, output])
 
         if len(training_data) % 10000 == 0 and len(training_data) != 0 or 'P' in keys:
+            display_stats(training_data)
             file_name = file_name + "_" + (str(len(training_data)))
             np.save(file_name + '.npy', training_data)
             file_size = get_file_size(file_name + '.npy')
             print(str(len(training_data))
                   + "- Saving to " + file_name + '.npy' +
-                  ' File Size:' + file_size+" MB"
+                  ' File Size:' + file_size + " MB"
                   )
 
         if cv2.waitKey(25) & 0xFF == ord('q'):
