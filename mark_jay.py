@@ -43,14 +43,10 @@ def display_stats(training_data):
             forwards.append([img, choice])
         elif choice == [0, 0, 1]:
             rights.append([img, choice])
-    print(str(len(data[1])))
+    print(str(len(training_data)))
     print('Forwards : ' + str(len(forwards)))
     print('Lefts    :' + str(len(lefts)))
     print('Rights   :' + str(len(rights)))
-    # forwards = forwards[:len(lefts)][:len(rights)]
-    # lefts = lefts[:len(forwards)]
-    # rights = rights[:len(forwards)]
-    # final_data = forwards + lefts + rights
 
 
 def is_controls(keys):
@@ -80,6 +76,7 @@ def main():
     wait_for(4, delay=2)
     file_name = 'F:/' + time.strftime('%Y_%m_%d %H_%M_%S', time.localtime(time.time()))
     training_data = []
+    paused = False
     while True:
         screen = grab_screen(region=BOX)
         screen = process_img(screen)
@@ -102,6 +99,16 @@ def main():
         if cv2.waitKey(25) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
             break
+
+        if 'T' in keys:
+            if paused:
+                paused = False
+                print('unpaused!')
+                time.sleep(1)
+            else:
+                print('Pausing!')
+                paused = True
+                time.sleep(1)
 
 
 main()
