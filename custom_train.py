@@ -9,17 +9,19 @@ from collections import deque
 from models import inception_v3 as googlenet
 from random import shuffle
 
+from Driver.alexnet import alexnet
+
 FILE_I_END = 1860
 
-WIDTH = 480
-HEIGHT = 270
+WIDTH = 60
+HEIGHT = 80
 LR = 1e-3
 EPOCHS = 30
 
-MODEL_NAME = ''
+MODEL_NAME = 'Test1'
 PREV_MODEL = ''
 
-LOAD_MODEL = True
+LOAD_MODEL = False
 
 wl = 0
 sl = 0
@@ -32,17 +34,11 @@ sal = 0
 sdl = 0
 nkl = 0
 
-w = [1, 0, 0, 0, 0, 0, 0, 0, 0]
-s = [0, 1, 0, 0, 0, 0, 0, 0, 0]
-a = [0, 0, 1, 0, 0, 0, 0, 0, 0]
-d = [0, 0, 0, 1, 0, 0, 0, 0, 0]
-wa = [0, 0, 0, 0, 1, 0, 0, 0, 0]
-wd = [0, 0, 0, 0, 0, 1, 0, 0, 0]
-sa = [0, 0, 0, 0, 0, 0, 1, 0, 0]
-sd = [0, 0, 0, 0, 0, 0, 0, 1, 0]
-nk = [0, 0, 0, 0, 0, 0, 0, 0, 1]
+w = [0, 1, 0]
+a = [1, 0, 0]
+d = [0, 0, 1]
 
-model = googlenet(WIDTH, HEIGHT, 3, LR, output=9, model_name=MODEL_NAME)
+model = alexnet(WIDTH, HEIGHT, 3, LR, output=9, model_name=MODEL_NAME)
 
 if LOAD_MODEL:
     model.load(PREV_MODEL)
@@ -58,7 +54,7 @@ for e in range(EPOCHS):
     for count, i in enumerate(data_order):
 
         try:
-            file_name = 'J:/phase10-random-padded/training_data-{}.npy'.format(i)
+            file_name = 'F:/Special/training_data-{}.npy'.format(i)
             # full file info
             train_data = np.load(file_name)
             print('training_data-{}.npy'.format(i), len(train_data))
@@ -78,7 +74,7 @@ for e in range(EPOCHS):
 
 
             # #
-            # always validating unique data: 
+            # always validating unique data:
             # shuffle(train_data)
             train = train_data[:-50]
             test = train_data[-50:]
@@ -100,14 +96,6 @@ for e in range(EPOCHS):
             print(str(e))
 
 
-
-
-
-
-
-
-
-
 #
 
-# tensorboard --logdir=foo:J:/phase10-code/log
+# tensorboard --logdir=foo:F:/phase10-code/log

@@ -21,11 +21,23 @@ def roi(img, vertices):
     return masked
 
 
+def draw_lines(img, lines):
+    try:
+        for line in lines:
+            coords = line[0]
+            cv2.line(img, (coords[0], coords[1]), (coords[2], coords[3]), [255, 255, 255], 3)
+    except TypeError:
+        print("NoneType")
+
+
 def process_img(original_img):
     processed_img = cv2.Canny(original_img, threshold1=100, threshold2=300)
     processed_img = roi(processed_img, [VERTICES])
+    # lines = cv2.HoughLinesP(processed_img, 1, np.pi / 180, 180, np.array([]), minLineLength=50, maxLineGap=600000)
+    # draw_lines(processed_img, lines)
     processed_img = cv2.GaussianBlur(processed_img, (5, 5), 1)
-    processed_img = cv2.resize(processed_img, (60, 60))
+    # processed_img = cv2.resize(processed_img, (60, 60))
+
     return processed_img
 
 
@@ -73,7 +85,7 @@ def get_file_size(file_name):
 
 def main():
     print('Starting...')
-    wait_for(4, delay=2)
+    # wait_for(4, delay=2)
     file_name = 'F:/' + time.strftime('%Y_%m_%d %H_%M_%S', time.localtime(time.time()))
     training_data = []
     paused = False
