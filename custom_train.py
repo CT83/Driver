@@ -1,15 +1,8 @@
-import numpy as np
-from grabscreen import grab_screen
-import cv2
-import time
-import os
-import pandas as pd
-from tqdm import tqdm
-from collections import deque
-from models import inception_v3 as googlenet
 from random import shuffle
 
-from Driver.alexnet import alexnet
+import numpy as np
+
+from alexnet import alexnet
 
 FILE_I_END = 1860
 

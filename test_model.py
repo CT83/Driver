@@ -6,16 +6,16 @@ import random
 
 import time
 
-from Driver.alexnet import alexnet
-from Driver.directkeys import ReleaseKey, A, W, D, PressKey
-from Driver.getkeys import key_check
-from Driver.grabscreen import grab_screen
+from alexnet import alexnet
+from directkeys import ReleaseKey, A, W, D, PressKey
+from getkeys import key_check
+from grabscreen import grab_screen
 
 WIDTH = 160
 HEIGHT = 120
 LR = 1e-3
 EPOCHS = 10
-MODEL_NAME = 'pygta5-car-fast-{}-{}-{}-epochs-300K-data.model'.format(LR, 'alexnet', EPOCHS)
+MODEL_NAME = 'pygta5-car-fast-{}-{}-{}-epochs-300K-data.model'.format(LR, 'alexnetv2', EPOCHS)
 
 t_time = 0.09
 

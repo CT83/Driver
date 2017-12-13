@@ -3,9 +3,9 @@ import time
 import cv2
 import numpy as np
 
-from Driver.create_training_data import keys_to_output
-from Driver.getkeys import key_check
-from Driver.grabscreen import grab_screen
+from create_training_data import keys_to_output
+from getkeys import key_check
+from grabscreen import grab_screen
 
 BOX = (10, 25, 646, 509)
 
