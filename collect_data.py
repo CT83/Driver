@@ -7,8 +7,7 @@ import cv2
 import numpy as np
 from cv2 import cv2
 
-from Driver.getkeys import key_check
-from Driver.grabscreen import grab_screen
+from getkeys import key_check
 
 BOX = (10, 25, 646, 509)
 VERTICES = np.array([[0, 300], [620, 300], [640, 400], [0, 400]])
@@ -62,6 +61,7 @@ def main():
     while True:
 
         if not paused:
+            from grabscreen import grab_screen
             screen = grab_screen(region=BOX)
             #img = process_img(screen)
             cv2.imshow('Car Vision', screen)
@@ -83,5 +83,9 @@ def main():
                 print('Pausing!')
                 paused = True
                 time.sleep(1)
+
+
+if __name__ == "__main__":
+    main()
 
 

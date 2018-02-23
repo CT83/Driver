@@ -1,23 +1,25 @@
 # test_model.py
-from cv2 import cv2
-
-import numpy as np
-import random
 
 import time
+
+import numpy as np
+from cv2 import cv2
 
 from alexnet import alexnet
 from directkeys import ReleaseKey, A, W, D, PressKey
 from getkeys import key_check
 from grabscreen import grab_screen
 
-WIDTH = 160
-HEIGHT = 120
+WIDTH = 60
+HEIGHT = 60
 LR = 1e-3
 EPOCHS = 10
-MODEL_NAME = 'pygta5-car-fast-{}-{}-{}-epochs-300K-data.model'.format(LR, 'alexnetv2', EPOCHS)
+# MODEL_NAME = 'pygta5-car-fast-{}-{}-{}-epochs-300K-data.model'.format(LR, 'alexnetv2', EPOCHS)
+MODEL_NAME = "Feb_23_Model"
 
 t_time = 0.09
+BOX = (10, 25, 646, 509)
+VERTICES = np.array([[0, 300], [620, 300], [640, 400], [0, 400]])
 
 
 def straight():
@@ -65,13 +67,15 @@ def main():
         if not paused:
             # 800x600 windowed mode
             # screen =  np.array(ImageGrab.grab(bbox=(0,40,800,640)))
-            screen = grab_screen(region=(0, 40, 800, 640))
+            screen = grab_screen(region=BOX)
             print('loop took {} seconds'.format(time.time() - last_time))
             last_time = time.time()
-            screen = cv2.cvtColor(screen, cv2.COLOR_BGR2GRAY)
-            screen = cv2.resize(screen, (160, 120))
 
-            prediction = model.predict([screen.reshape(160, 120, 1)])[0]
+            screen = cv2.cvtColor(screen, cv2.COLOR_BGR2GRAY)
+            screen = cv2.resize(screen, (60, 60))
+
+            cv2.imshow('Car Vision', screen)
+            prediction = model.predict([screen.reshape(WIDTH, HEIGHT, 1)])[0]
             print(prediction)
 
             turn_thresh = .75
@@ -79,12 +83,16 @@ def main():
 
             if prediction[1] > fwd_thresh:
                 straight()
+                # print("straight")
             elif prediction[0] > turn_thresh:
                 left()
+                # print("left")
             elif prediction[2] > turn_thresh:
                 right()
+                # print("right")
             else:
                 straight()
+                # print("straight")
 
         keys = key_check()
 
@@ -101,14 +109,5 @@ def main():
                 time.sleep(1)
 
 
-main()
-
-
-
-
-
-
-
-
-
-
+if __name__ == "__main__":
+    main()
