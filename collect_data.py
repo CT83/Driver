@@ -3,7 +3,6 @@
 import os
 import time
 
-import cv2
 import numpy as np
 from cv2 import cv2
 
@@ -53,9 +52,7 @@ def main():
         print('File does not exist, starting fresh!')
         training_data = []
 
-    for i in list(range(4))[::-1]:
-        print(i + 1)
-        time.sleep(1)
+    wait_countdown()
 
     paused = False
     while True:
@@ -63,11 +60,14 @@ def main():
         if not paused:
             from grabscreen import grab_screen
             screen = grab_screen(region=BOX)
-            #img = process_img(screen)
-            cv2.imshow('Car Vision', screen)
+            # img = process_img(screen)
+            screen = cv2.resize(screen, (480, 270))
+            screen = cv2.cvtColor(screen, cv2.COLOR_BGR2RGB)
+            cv2.imshow('window', cv2.resize(screen, (640, 360)))
+
             keys = key_check()
             output = keys_to_output(keys)
-            training_data.append([screen, keys])
+            training_data.append([screen, output])
 
             if len(training_data) % 200 == 0:
                 print(len(training_data))
@@ -85,7 +85,11 @@ def main():
                 time.sleep(1)
 
 
+def wait_countdown():
+    for i in list(range(4))[::-1]:
+        print(i + 1)
+        time.sleep(1)
+
+
 if __name__ == "__main__":
     main()
-
-
