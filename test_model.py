@@ -71,8 +71,8 @@ def main():
             print('loop took {} seconds'.format(time.time() - last_time))
             last_time = time.time()
 
-            screen = cv2.cvtColor(screen, cv2.COLOR_BGR2GRAY)
-            screen = cv2.resize(screen, (60, 60))
+            from mark_jay import process_img
+            screen = process_img(screen)
 
             cv2.imshow('Car Vision', screen)
             prediction = model.predict([screen.reshape(WIDTH, HEIGHT, 1)])[0]
@@ -80,7 +80,7 @@ def main():
 
             turn_thresh = .75
             fwd_thresh = 0.70
-
+            cv2.waitKey(25)
             if prediction[1] > fwd_thresh:
                 straight()
                 # print("straight")
@@ -97,7 +97,7 @@ def main():
         keys = key_check()
 
         # p pauses game and can get annoying.
-        if 'T' in keys:
+        if 'P' in keys:
             if paused:
                 paused = False
                 time.sleep(1)
