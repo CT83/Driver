@@ -2,13 +2,14 @@
 from random import shuffle
 
 import numpy as np
+
 from alexnet import alexnet
 
 WIDTH = 60
 HEIGHT = 60
 LR = 1e-3
 EPOCHS = 10
-MODEL_NAME = 'Feb_23_Model'
+MODEL_NAME = 'Feb_28_Model_2'
 
 model = alexnet(WIDTH, HEIGHT, LR)
 
@@ -42,10 +43,10 @@ def balance_data(train_data):
     return final_data
 
 
-hm_data = 22
+hm_data = 65
 for i in range(EPOCHS):
-    for i in range(1, hm_data + 1):
-        train_data = np.load('D:/Training Data/Driver/Special/training_data-{}.npy'.format(i))
+    for i in range(2, hm_data + 1):
+        train_data = np.load('E:/Training Data/Driver/27-02-2018/training_data-{}.npy'.format(i))
 
         train_data = balance_data(train_data)
         train = train_data[:-100]
@@ -60,8 +61,8 @@ for i in range(EPOCHS):
         model.fit({'input': X}, {'targets': Y}, n_epoch=1, validation_set=({'input': test_x}, {'targets': test_y}),
                   snapshot_step=500, show_metric=True, run_id=MODEL_NAME)
 
-        print("Model Saved")
-        model.save(MODEL_NAME)
-
+        if i % 3 == 0:
+            print("Model Saved",i)
+            model.save(MODEL_NAME)
 
 # tensorboard --logdir=foo:C:/

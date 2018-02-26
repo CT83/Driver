@@ -2,6 +2,7 @@
 
 import os
 import time
+from threading import Thread
 
 import numpy as np
 from cv2 import cv2
@@ -27,6 +28,7 @@ def keys_to_output(keys):
     else:
         output[1] = 1
     return output
+
 
 def main():
     file_name = 'training_data.npy'
@@ -55,10 +57,15 @@ def main():
             output = keys_to_output(keys)
             training_data.append([img, output])
 
-            if len(training_data) % 1000 == 0:
+            if len(training_data) % 10000 == 0:
                 display_stats(training_data)
                 print(len(training_data))
-                np.save(file_name, training_data)
+
+                Thread(target=save_data,
+                       kwargs={'file_name': file_name,
+                               'training_data': training_data}).start()
+
+                save_data(file_name, training_data)
                 print('SAVED!')
                 training_data = []
                 starting_value += 1
@@ -78,6 +85,10 @@ def main():
                 print('Pausing!')
                 paused = True
                 time.sleep(1)
+
+
+def save_data(file_name, training_data):
+    np.save(file_name, training_data)
 
 
 def wait_countdown():
