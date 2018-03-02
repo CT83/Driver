@@ -1,11 +1,13 @@
 # create_training_data.py
 
-import numpy as np
-from grabscreen import grab_screen
-import cv2
-import time
-from getkeys import key_check
 import os
+import time
+
+import cv2
+import numpy as np
+
+from sentdex.getkeys import key_check
+from sentdex.grabscreen import grab_screen
 
 
 def keys_to_output(keys):

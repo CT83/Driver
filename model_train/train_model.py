@@ -1,4 +1,3 @@
-# train_model.py
 from random import shuffle
 
 import numpy as np

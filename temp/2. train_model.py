@@ -1,13 +1,8 @@
-import numpy as np
-from grabscreen import grab_screen
-import cv2
-import time
-import os
-import pandas as pd
-from tqdm import tqdm
-from collections import deque
-from models import inception_v3 as googlenet
 from random import shuffle
+
+import numpy as np
+
+from models import inception_v3 as googlenet
 
 FILE_I_END = 1860
 
@@ -76,7 +71,6 @@ for e in range(EPOCHS):
             ##                if len(current_frames) == HM_FRAMES:
             ##                    train_data.append([list(current_frames),choice])
 
-
             # #
             # always validating unique data: 
             # shuffle(train_data)
@@ -98,15 +92,6 @@ for e in range(EPOCHS):
 
         except Exception as e:
             print(str(e))
-
-
-
-
-
-
-
-
-
 
 #
 

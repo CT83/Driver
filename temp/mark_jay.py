@@ -3,22 +3,16 @@ import time
 import cv2
 import numpy as np
 
-from create_training_data import keys_to_output
-from getkeys import key_check
-from grabscreen import grab_screen
+from collect_data import display_stats, process_img
+from temp.create_training_data import keys_to_output
+from sentdex.getkeys import key_check
+from sentdex.grabscreen import grab_screen
 
 BOX = (10, 25, 646, 509)
 
 # VERTICES = np.array([[0, 430], [50, 300], [470, 400], [620, 430], [600, 480], [0, 480]])
 VERTICES = np.array([[0, 300], [620, 300], [640, 400], [0, 400]])
 keys_to_record = {'W', 'A', 'D'}
-
-
-def roi(img, vertices):
-    mask = np.zeros_like(img)
-    cv2.fillPoly(mask, vertices, 255)
-    masked = cv2.bitwise_and(img, mask)
-    return masked
 
 
 def draw_lines(img, lines):
@@ -28,39 +22,6 @@ def draw_lines(img, lines):
             cv2.line(img, (coords[0], coords[1]), (coords[2], coords[3]), [255, 255, 255], 3)
     except TypeError:
         print("NoneType")
-
-
-def process_img(original_img):
-    # processed_img = cv2.Canny(original_img, threshold1=100, threshold2=300)
-    # processed_img = roi(original_img, [VERTICES])
-    # lines = cv2.HoughLinesP(processed_img, 1, np.pi / 180, 180, np.array([]), minLineLength=50, maxLineGap=600000)
-    # draw_lines(processed_img, lines)
-
-    processed_img = cv2.cvtColor(original_img, cv2.COLOR_RGB2GRAY)
-    # processed_img = cv2.GaussianBlur(processed_img, (5, 5), 1)
-    processed_img = cv2.resize(processed_img, (50, 50))
-
-    return processed_img
-
-
-def display_stats(training_data):
-    lefts = []
-    rights = []
-    forwards = []
-    for data in training_data:
-        img = data[0]
-        choice = data[1]
-
-        if choice == [1, 0, 0]:
-            lefts.append([img, choice])
-        elif choice == [0, 1, 0]:
-            forwards.append([img, choice])
-        elif choice == [0, 0, 1]:
-            rights.append([img, choice])
-    print(str(len(training_data)))
-    print('Forwards : ' + str(len(forwards)))
-    print('Lefts    :' + str(len(lefts)))
-    print('Rights   :' + str(len(rights)))
 
 
 def is_controls(keys):

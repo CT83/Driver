@@ -6,9 +6,9 @@ import numpy as np
 from cv2 import cv2
 
 from alexnet import alexnet
-from directkeys import ReleaseKey, A, W, D, PressKey
-from getkeys import key_check
-from grabscreen import grab_screen
+from sentdex.directkeys import ReleaseKey, A, W, D, PressKey
+from sentdex.getkeys import key_check
+from sentdex.grabscreen import grab_screen
 
 WIDTH = 50
 HEIGHT = 50
@@ -71,7 +71,7 @@ def main():
             print('loop took {} seconds'.format(time.time() - last_time))
             last_time = time.time()
 
-            from mark_jay import process_img
+            from collect_data import process_img
             screen = process_img(screen)
 
             cv2.imshow('Car Vision', screen)
