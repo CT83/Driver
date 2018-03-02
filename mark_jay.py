@@ -31,12 +31,14 @@ def draw_lines(img, lines):
 
 
 def process_img(original_img):
-    processed_img = cv2.Canny(original_img, threshold1=100, threshold2=300)
-    processed_img = roi(processed_img, [VERTICES])
+    # processed_img = cv2.Canny(original_img, threshold1=100, threshold2=300)
+    # processed_img = roi(original_img, [VERTICES])
     # lines = cv2.HoughLinesP(processed_img, 1, np.pi / 180, 180, np.array([]), minLineLength=50, maxLineGap=600000)
     # draw_lines(processed_img, lines)
-    processed_img = cv2.GaussianBlur(processed_img, (5, 5), 1)
-    processed_img = cv2.resize(processed_img, (60, 60))
+
+    processed_img = cv2.cvtColor(original_img, cv2.COLOR_RGB2GRAY)
+    # processed_img = cv2.GaussianBlur(processed_img, (5, 5), 1)
+    processed_img = cv2.resize(processed_img, (50, 50))
 
     return processed_img
 

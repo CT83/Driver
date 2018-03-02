@@ -5,13 +5,20 @@ import numpy as np
 
 from alexnet import alexnet
 
-WIDTH = 60
-HEIGHT = 60
+WIDTH = 50
+HEIGHT = 50
 LR = 1e-3
-EPOCHS = 10
-MODEL_NAME = 'Feb_28_Model_2'
+EPOCHS = 25
+MODEL_NAME = 'Mar_2_Model_1'
+
+PREV_MODEL = 'model_alexnet-769'
+
+LOAD_MODEL = True
 
 model = alexnet(WIDTH, HEIGHT, LR)
+if LOAD_MODEL:
+    model.load(PREV_MODEL)
+    print('We have loaded a previous model!!!!')
 
 
 def balance_data(train_data):
@@ -31,7 +38,6 @@ def balance_data(train_data):
             rights.append([img, choice])
         else:
             print('no matches')
-            # cv2.imshow('window2', data[0])
             input("Press Enter to continue...")
 
     forwards = forwards[:len(lefts)][:len(rights)]
@@ -43,10 +49,10 @@ def balance_data(train_data):
     return final_data
 
 
-hm_data = 65
+hm_data = 5
 for i in range(EPOCHS):
-    for i in range(2, hm_data + 1):
-        train_data = np.load('E:/Training Data/Driver/27-02-2018/training_data-{}.npy'.format(i))
+    for i in range(1, hm_data + 1):
+        train_data = np.load('D:/Training Data/Driver/50_50 Long/training_data-{}.npy'.format(i))
 
         train_data = balance_data(train_data)
         train = train_data[:-100]
@@ -61,8 +67,7 @@ for i in range(EPOCHS):
         model.fit({'input': X}, {'targets': Y}, n_epoch=1, validation_set=({'input': test_x}, {'targets': test_y}),
                   snapshot_step=500, show_metric=True, run_id=MODEL_NAME)
 
-        if i % 3 == 0:
-            print("Model Saved",i)
-            model.save(MODEL_NAME)
+        print("Model Saved", i)
+        model.save(MODEL_NAME)
 
 # tensorboard --logdir=foo:C:/

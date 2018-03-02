@@ -57,6 +57,8 @@ def main():
             output = keys_to_output(keys)
             training_data.append([img, output])
 
+            if len(training_data) % 100 == 0:
+                display_stats(training_data)
             if len(training_data) % 10000 == 0:
                 display_stats(training_data)
                 print(len(training_data))
