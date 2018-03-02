@@ -10,7 +10,7 @@ LR = 1e-3
 EPOCHS = 25
 MODEL_NAME = 'Mar_2_Model_1'
 
-PREV_MODEL = 'model_alexnet-769'
+PREV_MODEL = 'model_alexnet-788'
 
 LOAD_MODEL = True
 

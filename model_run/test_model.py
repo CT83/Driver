@@ -15,7 +15,7 @@ HEIGHT = 50
 LR = 1e-3
 EPOCHS = 10
 # MODEL_NAME = 'pygta5-car-fast-{}-{}-{}-epochs-300K-data.model'.format(LR, 'alexnetv2', EPOCHS)
-MODEL_NAME = "70Acc"
+MODEL_NAME = "92Acc"
 
 t_time = 0.09
 BOX = (10, 25, 646, 509)
@@ -62,7 +62,7 @@ def main():
         time.sleep(1)
 
     paused = False
-    while (True):
+    while True:
 
         if not paused:
             # 800x600 windowed mode
@@ -97,7 +97,7 @@ def main():
         keys = key_check()
 
         # p pauses game and can get annoying.
-        if 'P' in keys:
+        if 'p' in keys:
             if paused:
                 paused = False
                 time.sleep(1)
