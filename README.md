@@ -18,4 +18,8 @@ Driver is an AI, wrote in Python using Tensorflow and OpenCV to drive cars in GT
 ## Conclusion
 Pending...
 
+
+## References
+[SentDex - Python Plays: Grand Theft Auto V](https://www.youtube.com/playlist?list=PLQVvvaa0QuDeETZEOy4VdocT7TOjfSA8a)
+
 **tl;dr** [Live Demo](https://youtu.be/ICIppxuDDL4?t=30s)
