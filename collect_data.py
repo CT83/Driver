@@ -62,7 +62,7 @@ def main():
                        kwargs={'file_name': file_name,
                                'training_data': training_data}).start()
 
-                save_data(file_name, training_data)
+                # save_data(file_name, training_data)
                 print('SAVED!')
                 training_data = []
                 starting_value += 1
