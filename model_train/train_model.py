@@ -8,11 +8,11 @@ WIDTH = 50
 HEIGHT = 50
 LR = 1e-3
 EPOCHS = 25
-MODEL_NAME = 'Mar_2_Model_1'
+MODEL_NAME = 'April_20_Model_4'
 
 PREV_MODEL = 'model_alexnet-788'
 
-LOAD_MODEL = True
+LOAD_MODEL = False
 
 model = alexnet(WIDTH, HEIGHT, LR)
 if LOAD_MODEL:
