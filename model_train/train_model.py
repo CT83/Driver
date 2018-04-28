@@ -10,7 +10,7 @@ LR = 1e-3
 EPOCHS = 20
 MODEL_NAME = 'April_28_Model_1'
 
-PREV_MODEL = 'model_alexnet-2904'
+PREV_MODEL = 'April_28_Model_1'
 
 LOAD_MODEL = True
 hm_data = 5
@@ -36,6 +36,7 @@ def balance_data(train_data):
             print('no matches')
             input("Press Enter to continue...")
 
+    print("Lefts:", len(lefts), " Forwards:", len(forwards), " Rights:", len(rights))
     forwards = forwards[:len(lefts)][:len(rights)]
     lefts = lefts[:len(forwards)]
     rights = rights[:len(forwards)]
@@ -67,10 +68,12 @@ def main():
 
     for epoch in range(EPOCHS):
         train_data = combine_all_data()
+        shuffle(train_data)
         print("Training Data ", str(len(train_data)), " Data ", str(train_data))
         train_data = balance_data(train_data)
         train = train_data[:-1000]
         test = train_data[-1000:]
+        print("Split | Train :", len(train), " | Test :", len(test))
 
         X = np.array([i[0] for i in train]).reshape(-1, WIDTH, HEIGHT, 1)
         Y = [i[1] for i in train]
