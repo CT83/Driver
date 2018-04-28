@@ -8,16 +8,13 @@ WIDTH = 50
 HEIGHT = 50
 LR = 1e-3
 EPOCHS = 20
-MODEL_NAME = 'April_21_Model_1'
+MODEL_NAME = 'April_28_Model_1'
 
-PREV_MODEL = 'model_alexnet-816'
+PREV_MODEL = 'model_alexnet-2904'
 
 LOAD_MODEL = True
-
-model = alexnet(WIDTH, HEIGHT, LR)
-if LOAD_MODEL:
-    model.load(PREV_MODEL)
-    print('We have loaded a previous model!!!!')
+hm_data = 5
+DATA_RANGE = 5
 
 
 def balance_data(train_data):
@@ -48,26 +45,32 @@ def balance_data(train_data):
     return final_data
 
 
-hm_data = 5
-for i in range(EPOCHS):
-    for i in range(1, hm_data + 1, 10):
+def combine_all_data(data_range=DATA_RANGE):
+    train_data = []
+    for j in range(data_range):
+        try:
+            print("Loading 50_50 Long/training_data-{}.npy", j)
+            inf_from_every_file = np.load('D:/Training Data/Driver/50_50 Long/training_data-{}.npy'.format(j))
+            train_data.append(inf_from_every_file)
+        except Exception as e:
+            print(e)
+            print('Failted to Load training_data-{}.npy', j)
+    train_data = np.concatenate(train_data)
+    return train_data
 
-        train_data = []
 
-        for j in range(i, i + 10):
-            try:
-                print("Loading 50_50 Long/training_data-{}.npy", j)
-                inf_from_every_file = np.load('D:/Training Data/Driver/50_50 Long/training_data-{}.npy'.format(j))
-                train_data.append(inf_from_every_file)
-            except Exception as e:
-                print(e)
-                print('Failted to Load training_data-{}.npy', j)
+def main():
+    model = alexnet(WIDTH, HEIGHT, LR)
+    if LOAD_MODEL:
+        model.load(PREV_MODEL)
+        print('We have loaded a previous model!!!!')
 
-        train_data = np.concatenate(train_data)
+    for epoch in range(EPOCHS):
+        train_data = combine_all_data()
         print("Training Data ", str(len(train_data)), " Data ", str(train_data))
         train_data = balance_data(train_data)
-        train = train_data[:-100]
-        test = train_data[-100:]
+        train = train_data[:-1000]
+        test = train_data[-1000:]
 
         X = np.array([i[0] for i in train]).reshape(-1, WIDTH, HEIGHT, 1)
         Y = [i[1] for i in train]
@@ -76,9 +79,11 @@ for i in range(EPOCHS):
         test_y = [i[1] for i in test]
 
         model.fit({'input': X}, {'targets': Y}, n_epoch=1, validation_set=({'input': test_x}, {'targets': test_y}),
-                  snapshot_step=500, show_metric=True, run_id=MODEL_NAME)
+                  snapshot_step=2500, show_metric=True, run_id=MODEL_NAME)
 
-        print("Model Saved", i)
+        print("Model Saved", epoch)
         model.save(MODEL_NAME)
 
-        # tensorboard --logdir=foo:C:/
+
+if __name__ == '__main__':
+    main()
