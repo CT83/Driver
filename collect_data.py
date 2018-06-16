@@ -10,7 +10,7 @@ from cv2 import cv2
 
 from sentdex.getkeys import key_check
 
-BOX = (10, 25, 646, 509)
+BOX = (10, 25, 645, 510)
 VERTICES = np.array([[0, 300], [620, 300], [640, 400], [0, 400]])
 
 
@@ -54,7 +54,7 @@ def main():
 
             if len(training_data) % 100 == 0:
                 display_stats(training_data)
-            if len(training_data) % 10000 == 0:
+            if len(training_data) % 1000 == 0:
                 display_stats(training_data)
                 print(len(training_data))
 
@@ -62,8 +62,7 @@ def main():
                        kwargs={'file_name': file_name,
                                'training_data': training_data}).start()
 
-                # save_data(file_name, training_data)
-                print('SAVED!')
+                print('Saved', file_name)
                 training_data = []
                 starting_value += 1
                 file_name = 'training_data-{}.npy'.format(starting_value)
@@ -94,9 +93,6 @@ def wait_countdown():
         time.sleep(1)
 
 
-if __name__ == "__main__":
-    main()
-
 
 def display_stats(training_data):
     lefts = []
@@ -112,22 +108,23 @@ def display_stats(training_data):
             forwards.append([img, choice])
         elif choice == [0, 0, 1]:
             rights.append([img, choice])
-    print(str(len(training_data)))
+    print('Number of Frames',str(len(training_data)))
     print('Forwards : ' + str(len(forwards)))
     print('Lefts    :' + str(len(lefts)))
     print('Rights   :' + str(len(rights)))
 
 
 def process_img(original_img):
+    processed_img = original_img
     # processed_img = cv2.Canny(original_img, threshold1=100, threshold2=300)
-    processed_img = roi(original_img, [VERTICES])
+    # processed_img = roi(original_img, [VERTICES])
     # lines = cv2.HoughLinesP(processed_img, 1, np.pi / 180, 180, np.array([]), minLineLength=50, maxLineGap=600000)
     # draw_lines(processed_img, lines)
 
-    processed_img = cv2.cvtColor(original_img, cv2.COLOR_RGB2GRAY)
+    # processed_img = cv2.cvtColor(original_img, cv2.COLOR_RGB2GRAY)
     # processed_img = cv2.GaussianBlur(processed_img, (5, 5), 1)
-    processed_img = cv2.resize(processed_img, (50, 50))
-
+    # processed_img = cv2.resize(processed_img, (50, 50))
+    processed_img = cv2.cvtColor(processed_img, cv2.COLOR_BGR2RGB)
     return processed_img
 
 
@@ -136,3 +133,7 @@ def roi(img, vertices):
     cv2.fillPoly(mask, vertices, 255)
     masked = cv2.bitwise_and(img, mask)
     return masked
+
+
+if __name__ == "__main__":
+    main()
