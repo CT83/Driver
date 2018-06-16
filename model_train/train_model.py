@@ -7,14 +7,14 @@ from alexnet import alexnet
 WIDTH = 50
 HEIGHT = 50
 LR = 1e-3
-EPOCHS = 20
-MODEL_NAME = 'April_28_Model_1'
+EPOCHS = 3
+MODEL_NAME = 'April_28_Overnight_Model_'
 
-PREV_MODEL = 'April_28_Model_1'
+PREV_MODEL = 'model_alexnet-3091'
 
-LOAD_MODEL = True
+LOAD_MODEL = False
 hm_data = 5
-DATA_RANGE = 5
+DATA_RANGE = 20
 
 
 def balance_data(train_data):
@@ -55,7 +55,7 @@ def combine_all_data(data_range=DATA_RANGE):
             train_data.append(inf_from_every_file)
         except Exception as e:
             print(e)
-            print('Failted to Load training_data-{}.npy', j)
+            print('Failed to Load training_data-{}.npy', j)
     train_data = np.concatenate(train_data)
     return train_data
 
@@ -85,7 +85,7 @@ def main():
                   snapshot_step=2500, show_metric=True, run_id=MODEL_NAME)
 
         print("Model Saved", epoch)
-        model.save(MODEL_NAME)
+        model.save(MODEL_NAME + str(epoch))
 
 
 if __name__ == '__main__':

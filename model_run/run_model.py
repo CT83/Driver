@@ -1,4 +1,4 @@
-# test_model.py
+# run_model.py
 
 import time
 
@@ -15,7 +15,7 @@ HEIGHT = 50
 LR = 1e-3
 EPOCHS = 10
 # MODEL_NAME = 'pygta5-car-fast-{}-{}-{}-epochs-300K-data.model'.format(LR, 'alexnetv2', EPOCHS)
-MODEL_NAME = "92Acc"
+MODEL_NAME = "April_28_Model_12"
 
 t_time = 0.09
 BOX = (10, 25, 646, 509)
