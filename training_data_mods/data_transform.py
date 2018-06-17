@@ -59,7 +59,7 @@ def combine_all_data(start_data_range=1, data_range=DATA_RANGE):
 
 def data_transform():
     from collect_data import process_img
-
+    name_ctr = 1
     for j in range(1, DATA_RANGE, PROCESS_BATCH_SIZE):
         training_data = []
         try:
@@ -74,8 +74,9 @@ def data_transform():
                 image = process_img(image)
                 training_data.append([image, keys])
                 # preview_image(image)
-            save_data('processed/training_data-{}.npy'.format(j),
+            save_data('processed/training_data-{}.npy'.format(name_ctr),
                       training_data)
+            name_ctr += 1
         except Exception as e:
             print(e)
 

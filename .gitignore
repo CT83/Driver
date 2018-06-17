@@ -108,3 +108,8 @@ ENV/
 
 .idea
 /.idea
+
+
+# Tensorflow
+model_train/*.tempstate*
+model_train/logs

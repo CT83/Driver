@@ -7,14 +7,15 @@ from alexnet import alexnet
 WIDTH = 100
 HEIGHT = 100
 LR = 1e-3
-EPOCHS = 3
-MODEL_NAME = 'June_17_Overnight_Model_'
+EPOCHS = 20
+MODEL_NAME = 'June_17_Model'
 
-PREV_MODEL = 'model_alexnet-3091'
+PREV_MODEL = 'model_alexnet-702'
 
-LOAD_MODEL = False
+LOAD_MODEL = True
 hm_data = 5
 DATA_RANGE = 150
+VAL_SIZE=1000
 
 
 def balance_data(train_data):
@@ -51,7 +52,7 @@ def combine_all_data(data_range=DATA_RANGE):
     for j in range(1, data_range):
         try:
             print("Loading training_data-{}.npy", j)
-            inf_from_every_file = np.load('F:\Training Data/training_data-{}.npy'.format(j))
+            inf_from_every_file = np.load('F:\Training Data/processed/training_data-{}.npy'.format(j))
             train_data.append(inf_from_every_file)
         except Exception as e:
             print(e)
@@ -62,37 +63,37 @@ def combine_all_data(data_range=DATA_RANGE):
 
 def main():
     model = alexnet(WIDTH, HEIGHT, LR)
-    # if LOAD_MODEL:
-    #     model.load(PREV_MODEL)
-    #     print('We have loaded a previous model!!!!')
+    if LOAD_MODEL:
+        model.load(PREV_MODEL)
+        print('We have loaded a previous model!!!!')
 
     for epoch in range(EPOCHS):
-        for j in range(1, DATA_RANGE):
-            try:
-                print("Loading training_data-{}.npy", j)
-                train_data = np.load('F:\Training Data/processed/training_data-{}.npy'.format(j))
-                print("Train Data Shape:", train_data.shape)
-                shuffle(train_data)
-                print("Training Data ", str(len(train_data)))
-                # train_data = balance_data(train_data)
-                train = train_data[:-50]
-                test = train_data[-50:]
-                print("Split | Train :", len(train), " | Test :", len(test))
+        # for j in range(1, DATA_RANGE):
+        try:
+            train_data = combine_all_data(data_range=7)
+            print("Train Data Shape:", train_data.shape)
+            shuffle(train_data)
+            print("Training Data ", str(len(train_data)))
+            # train_data = balance_data(train_data)
+            train = train_data[:-VAL_SIZE]
+            test = train_data[-VAL_SIZE:]
+            print("Split | Train :", len(train), " | Test :", len(test))
 
-                X = np.array([i[0] for i in train]).reshape(-1, WIDTH, HEIGHT, 1)
-                Y = [i[1] for i in train]
+            X = np.array([i[0] for i in train]).reshape(-1, WIDTH, HEIGHT, 1)
+            Y = [i[1] for i in train]
 
-                test_x = np.array([i[0] for i in test]).reshape(-1, WIDTH, HEIGHT, 1)
-                test_y = [i[1] for i in test]
+            test_x = np.array([i[0] for i in test]).reshape(-1, WIDTH, HEIGHT, 1)
+            test_y = [i[1] for i in test]
 
-                model.fit({'input': X}, {'targets': Y}, n_epoch=1,
-                          validation_set=({'input': test_x}, {'targets': test_y}),
-                          snapshot_step=2500, show_metric=True, run_id=MODEL_NAME)
+            model.fit({'input': X}, {'targets': Y}, n_epoch=1,
+                      validation_set=({'input': test_x}, {'targets': test_y}),
+                      snapshot_step=2500, show_metric=True, run_id=MODEL_NAME,
+                      shuffle=True)
 
-                print("Model Saved", epoch)
-                model.save(MODEL_NAME + str(epoch) + "_data_" + str(j))
-            except Exception as e:
-                print(e)
+            print("Model Saved", epoch)
+            model.save(MODEL_NAME + str(epoch))
+        except NameError as e:
+            print(e)
 
 
 if __name__ == '__main__':

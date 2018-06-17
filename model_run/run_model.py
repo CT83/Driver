@@ -10,12 +10,12 @@ from sentdex.directkeys import ReleaseKey, A, W, D, PressKey
 from sentdex.getkeys import key_check
 from sentdex.grabscreen import grab_screen
 
-WIDTH = 50
-HEIGHT = 50
+WIDTH = 100
+HEIGHT = 100
 LR = 1e-3
 EPOCHS = 10
 # MODEL_NAME = 'pygta5-car-fast-{}-{}-{}-epochs-300K-data.model'.format(LR, 'alexnetv2', EPOCHS)
-MODEL_NAME = "April_28_Model_12"
+MODEL_NAME = "June_17_Model19"
 
 t_time = 0.09
 BOX = (10, 25, 646, 509)
