@@ -1,6 +1,5 @@
 # create_training_data.py
 
-import os
 import time
 from threading import Thread
 
@@ -29,14 +28,7 @@ def keys_to_output(keys):
 def main():
     file_name = 'training_data-1.npy'
     starting_value = 1
-
-    if os.path.isfile(file_name):
-        print('File exists, loading previous data!')
-        training_data = list(np.load(file_name))
-    else:
-        print('File does not exist, starting fresh!')
-        training_data = []
-
+    training_data = []
     wait_countdown()
 
     paused = False
@@ -54,7 +46,7 @@ def main():
 
             if len(training_data) % 100 == 0:
                 display_stats(training_data)
-            if len(training_data) % 1000 == 0:
+            if len(training_data) % 250 == 0:
                 display_stats(training_data)
                 print(len(training_data))
 
@@ -84,7 +76,7 @@ def main():
 
 
 def save_data(file_name, training_data):
-    np.save(file_name, training_data)
+    np.save('F:\Training Data/' + file_name, training_data)
 
 
 def wait_countdown():
@@ -115,15 +107,15 @@ def display_stats(training_data):
 
 def process_img(original_img):
     processed_img = original_img
-    # processed_img = cv2.Canny(original_img, threshold1=100, threshold2=300)
-    # processed_img = roi(original_img, [VERTICES])
+    processed_img = cv2.Canny(processed_img, threshold1=100, threshold2=300)
+    processed_img = roi(processed_img, [VERTICES])
     # lines = cv2.HoughLinesP(processed_img, 1, np.pi / 180, 180, np.array([]), minLineLength=50, maxLineGap=600000)
     # draw_lines(processed_img, lines)
 
     # processed_img = cv2.cvtColor(original_img, cv2.COLOR_RGB2GRAY)
     # processed_img = cv2.GaussianBlur(processed_img, (5, 5), 1)
-    # processed_img = cv2.resize(processed_img, (50, 50))
-    processed_img = cv2.cvtColor(processed_img, cv2.COLOR_BGR2RGB)
+    processed_img = cv2.resize(processed_img, (300, 300))
+    # processed_img = cv2.cvtColor(processed_img, cv2.COLOR_BGR2RGB)
     return processed_img
 
 
