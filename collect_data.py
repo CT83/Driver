@@ -27,7 +27,7 @@ def keys_to_output(keys):
 
 
 def main():
-    file_name = 'training_data.npy'
+    file_name = 'training_data-1.npy'
     starting_value = 1
 
     if os.path.isfile(file_name):
@@ -93,7 +93,6 @@ def wait_countdown():
         time.sleep(1)
 
 
-
 def display_stats(training_data):
     lefts = []
     rights = []
@@ -108,7 +107,7 @@ def display_stats(training_data):
             forwards.append([img, choice])
         elif choice == [0, 0, 1]:
             rights.append([img, choice])
-    print('Number of Frames',str(len(training_data)))
+    print('Number of Frames', str(len(training_data)))
     print('Forwards : ' + str(len(forwards)))
     print('Lefts    :' + str(len(lefts)))
     print('Rights   :' + str(len(rights)))

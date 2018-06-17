@@ -28,7 +28,7 @@ def keys_to_output(keys):
 
 
 def main():
-    file_name = 'training_data.npy'
+    file_name = 'training_data-1.npy'
 
     if os.path.isfile(file_name):
         print('File exists, loading previous data!')
