@@ -1,12 +1,11 @@
 from random import shuffle
 
 import numpy as np
-from cv2 import cv2
 
 from alexnet import alexnet
 
-WIDTH = 300
-HEIGHT = 300
+WIDTH = 100
+HEIGHT = 100
 LR = 1e-3
 EPOCHS = 3
 MODEL_NAME = 'June_17_Overnight_Model_'

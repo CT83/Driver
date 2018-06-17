@@ -114,7 +114,7 @@ def process_img(original_img):
 
     # processed_img = cv2.cvtColor(original_img, cv2.COLOR_RGB2GRAY)
     # processed_img = cv2.GaussianBlur(processed_img, (5, 5), 1)
-    processed_img = cv2.resize(processed_img, (300, 300))
+    processed_img = cv2.resize(processed_img, (100, 100))
     # processed_img = cv2.cvtColor(processed_img, cv2.COLOR_BGR2RGB)
     return processed_img
 
