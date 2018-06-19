@@ -5,7 +5,7 @@ import time
 import numpy as np
 from cv2 import cv2
 
-from alexnet import alexnet
+from models.alexnet import alexnet
 from sentdex.directkeys import ReleaseKey, A, W, D, PressKey
 from sentdex.getkeys import key_check
 from sentdex.grabscreen import grab_screen

@@ -2,7 +2,7 @@ from random import shuffle
 
 import numpy as np
 
-from alexnet import alexnet
+from models.alexnet import alexnet
 
 FILE_I_END = 1860
 
