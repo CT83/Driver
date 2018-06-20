@@ -32,6 +32,6 @@ def comma_ai(width, height, channels):
     model.add(Dense(512))
     model.add(Dropout(.5))
     model.add(ELU())
-    model.add(Dense(3))
+    model.add(Dense(1))
 
     return model

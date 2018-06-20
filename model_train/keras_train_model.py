@@ -32,7 +32,8 @@ def batch_data_generator(x, y, batch_size):
 def main():
     train_data = None
     try:
-        train_data = combine_all_data(data_range=7)
+        from training_data_mods.data_transform import PROCESSED_DATA_NPY_PATH
+        train_data = combine_all_data(data_range=7, data_path=PROCESSED_DATA_NPY_PATH)
         shuffle(train_data)
     except NameError as e:
         print(e)
@@ -54,23 +55,27 @@ def main():
     model = comma_ai(WIDTH, HEIGHT, channels=1)
     adam = Adam(lr=1e-12)
     model.compile(optimizer=adam, loss="mse")
-    tensorboard = TensorBoard(log_dir="logs/" + MODEL_NAME)
+    tensorboard = TensorBoard(log_dir="log/" + MODEL_NAME)
     if LOAD_MODEL:
         print('We have loaded a previous model.')
         model.load_weights(MODEL_NAME + '.h5')
     model.summary()
     checkpointer = ModelCheckpoint(filepath=MODEL_NAME + ".h5", verbose=1, save_best_only=True)
 
-    history = model.fit_generator(
-        batch_data_generator(x_train, y_train, batch_size),
-        samples_per_epoch=((len(y_train) // batch_size) * batch_size) * 2,
-        nb_epoch=nb_epoch,
-        verbose=1,
-        validation_data=batch_data_generator(x_val, y_val, batch_size),
-        nb_val_samples=((len(y_val) // batch_size) * batch_size) * 2,
-        shuffle=True,
-        callbacks=[tensorboard],
-    )
+    # history = model.fit_generator(
+    #     batch_data_generator(x_train, y_train, batch_size),
+    #     samples_per_epoch=((len(y_train) // batch_size) * batch_size) * 2,
+    #     nb_epoch=nb_epoch,
+    #     verbose=1,
+    #     validation_data=batch_data_generator(x_val, y_val, batch_size),
+    #     nb_val_samples=((len(y_val) // batch_size) * batch_size) * 2,
+    #     shuffle=True,
+    #     callbacks=[tensorboard],
+    # )
+    history = model.fit(x_train, y_train, epochs=150, batch_size=10, verbose=1,
+                        shuffle=True,
+                        callbacks=[tensorboard],
+                        validation_data=(x_val, y_val))
     # Save weights
     model.save_weights(MODEL_NAME + ".h5", True)
     # Save model architecture

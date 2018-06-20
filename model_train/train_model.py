@@ -3,6 +3,7 @@ from random import shuffle
 import numpy as np
 
 from models.alexnet import alexnet
+from training_data_mods.data_transform import PROCESSED_DATA_NPY_PATH
 
 TRAINING_DATA_NPY_PATH = 'D:\Training Data\Driver/400_400 Approx Images/balanced_shuffled_resized_100_100/training_data-{}.npy'
 
@@ -49,12 +50,12 @@ def balance_data(train_data):
     return final_data
 
 
-def combine_all_data(data_range=DATA_RANGE):
+def combine_all_data(data_range=DATA_RANGE, data_path=PROCESSED_DATA_NPY_PATH):
     train_data = []
     for j in range(1, data_range):
         try:
             print("Loading training_data-{}.npy", j)
-            inf_from_every_file = np.load(TRAINING_DATA_NPY_PATH.format(j))
+            inf_from_every_file = np.load(data_path.format(j))
             train_data.append(inf_from_every_file)
         except Exception as e:
             print(e)

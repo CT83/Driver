@@ -3,15 +3,16 @@ from random import shuffle
 import numpy as np
 from cv2 import cv2
 
-from collect_data import save_data
-
 WIDTH = 100
 HEIGHT = 100
 LR = 1e-3
 EPOCHS = 3
 hm_data = 5
-DATA_RANGE = 152
-PROCESS_BATCH_SIZE = 25
+DATA_RANGE = 151
+PROCESS_BATCH_SIZE = 10
+
+TRAINING_DATA_NPY_PATH = 'D:\Training Data\Driver/400_400 Approx Images/training_data-{}.npy'
+PROCESSED_DATA_NPY_PATH = 'D:\Training Data\Driver/400_400 Approx Images/processed/training_data-{}.npy'
 
 
 def balance_data(train_data):
@@ -48,7 +49,7 @@ def combine_all_data(start_data_range=1, data_range=DATA_RANGE):
     for j in range(start_data_range, data_range):
         try:
             print("Loading training_data-{}.npy", j)
-            inf_from_every_file = np.load('F:\Training Data/training_data-{}.npy'.format(j))
+            inf_from_every_file = np.load(TRAINING_DATA_NPY_PATH.format(j))
             train_data.append(inf_from_every_file)
         except Exception as e:
             print(e)
@@ -63,7 +64,6 @@ def data_transform():
     for j in range(1, DATA_RANGE, PROCESS_BATCH_SIZE):
         training_data = []
         try:
-            # data = np.load('F:\Training Data/training_data-{}.npy'.format(j))
             data = combine_all_data(start_data_range=j, data_range=j + PROCESS_BATCH_SIZE)
             data = balance_data(data)
             shuffle(data)
@@ -72,10 +72,17 @@ def data_transform():
                 image = frame_input[0]
                 keys = frame_input[1]
                 image = process_img(image)
+
+                if keys == [1, 0, 0] or keys == [0, 0, 1]:
+                    image = cv2.flip(image, 1)
+                    if keys == [1, 0, 0]:
+                        keys = [0, 0, 1]
+                    if keys == [0, 0, 1]:
+                        keys = [1, 0, 0]
+
                 training_data.append([image, keys])
                 # preview_image(image)
-            save_data('processed/training_data-{}.npy'.format(name_ctr),
-                      training_data)
+            np.save(PROCESSED_DATA_NPY_PATH.format(name_ctr), training_data)
             name_ctr += 1
         except Exception as e:
             print(e)
@@ -85,22 +92,6 @@ def preview_image(image):
     cv2.imshow('window', image)
     if cv2.waitKey(3) & 0xFF == ord('q'):
         cv2.destroyAllWindows()
-
-
-def main():
-    for j in range(1, DATA_RANGE):
-        try:
-            print("Loading training_data-{}.npy", j)
-            data = np.load('F:\Training Data/training_data-{}.npy'.format(j))
-            for frame_input in data:
-                image = frame_input[0]
-                keys = frame_input[1]
-                cv2.imshow('window', image)
-                print(keys)
-                if cv2.waitKey(50) & 0xFF == ord('q'):
-                    cv2.destroyAllWindows()
-        except Exception as e:
-            print(e)
 
 
 if __name__ == '__main__':
