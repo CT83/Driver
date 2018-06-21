@@ -4,18 +4,16 @@ from random import shuffle
 # Fix error with Keras and TensorFlow
 import numpy as np
 from keras.callbacks import ModelCheckpoint, TensorBoard
-from keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
 
 from model_train.train_model import combine_all_data
-from models.comma_ai import comma_ai
 
 WIDTH = 100
 HEIGHT = 100
 LR = 1e-3
-EPOCHS = 20
-MODEL_NAME = 'Comma_Ai_18th_June'
+EPOCHS = 40
+MODEL_NAME = 'AlexNet_Keras_21th_June'
 
 PREV_MODEL = 'model_alexnet-702'
 
@@ -31,14 +29,17 @@ def batch_data_generator(x, y, batch_size):
 
 def main():
     train_data = None
+    tensorboard = TensorBoard(log_dir="log/" + MODEL_NAME)
     try:
         from training_data_mods.data_transform import PROCESSED_DATA_NPY_PATH
-        train_data = combine_all_data(data_range=7, data_path=PROCESSED_DATA_NPY_PATH)
+        train_data = combine_all_data(data_range=15,
+                                      data_path=PROCESSED_DATA_NPY_PATH)
         shuffle(train_data)
     except NameError as e:
         print(e)
     print("Train Data Shape:", train_data.shape)
     X = np.array([i[0] for i in train_data]).reshape(-1, WIDTH, HEIGHT, 1)
+    # X = np.array([i[0] for i in train_data])
     Y = [i[1] for i in train_data]
     x_train, x_val, y_train, y_val = train_test_split(X, Y,
                                                       test_size=0.15,
@@ -52,27 +53,28 @@ def main():
 
     nb_epoch = 1
     batch_size = 16
-    model = comma_ai(WIDTH, HEIGHT, channels=1)
-    adam = Adam(lr=1e-12)
-    model.compile(optimizer=adam, loss="mse")
-    tensorboard = TensorBoard(log_dir="log/" + MODEL_NAME)
-    if LOAD_MODEL:
-        print('We have loaded a previous model.')
-        model.load_weights(MODEL_NAME + '.h5')
+
+    # Create the Model
+    from models.ImageModels.AlexNet import create_model
+    xy, img_input, CONCAT_AXIS, INP_SHAPE, DIM_ORDERING = create_model()
+
+    # Create a Keras Model - Functional API
+    from keras import Model
+    model = Model(input=img_input,
+                  output=[xy])
+
+    model.compile(optimizer='rmsprop',
+                  loss='categorical_crossentropy')
+    print('Model Compiled')
+
+    # if LOAD_MODEL:
+    #     print('We have loaded a previous model.')
+    #     model.load_weights(MODEL_NAME + '.h5')
+
     model.summary()
     checkpointer = ModelCheckpoint(filepath=MODEL_NAME + ".h5", verbose=1, save_best_only=True)
 
-    # history = model.fit_generator(
-    #     batch_data_generator(x_train, y_train, batch_size),
-    #     samples_per_epoch=((len(y_train) // batch_size) * batch_size) * 2,
-    #     nb_epoch=nb_epoch,
-    #     verbose=1,
-    #     validation_data=batch_data_generator(x_val, y_val, batch_size),
-    #     nb_val_samples=((len(y_val) // batch_size) * batch_size) * 2,
-    #     shuffle=True,
-    #     callbacks=[tensorboard],
-    # )
-    history = model.fit(x_train, y_train, epochs=150, batch_size=10, verbose=1,
+    history = model.fit(x_train, y_train, epochs=EPOCHS, batch_size=10, verbose=1,
                         shuffle=True,
                         callbacks=[tensorboard],
                         validation_data=(x_val, y_val))

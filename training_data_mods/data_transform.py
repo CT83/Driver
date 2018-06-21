@@ -3,8 +3,8 @@ from random import shuffle
 import numpy as np
 from cv2 import cv2
 
-WIDTH = 100
-HEIGHT = 100
+WIDTH = 224
+HEIGHT = 224
 LR = 1e-3
 EPOCHS = 3
 hm_data = 5
@@ -65,23 +65,25 @@ def data_transform():
         training_data = []
         try:
             data = combine_all_data(start_data_range=j, data_range=j + PROCESS_BATCH_SIZE)
-            data = balance_data(data)
-            shuffle(data)
+
             print("Data Shape:", len(data))
             for frame_input in data:
                 image = frame_input[0]
                 keys = frame_input[1]
-                image = process_img(image)
+                image = process_img(image, width=WIDTH, height=HEIGHT)
 
                 if keys == [1, 0, 0] or keys == [0, 0, 1]:
-                    image = cv2.flip(image, 1)
+                    image_2 = cv2.flip(image, 1)
                     if keys == [1, 0, 0]:
-                        keys = [0, 0, 1]
-                    if keys == [0, 0, 1]:
-                        keys = [1, 0, 0]
+                        keys_2 = [0, 0, 1]
+                    else:
+                        keys_2 = [1, 0, 0]
+                    training_data.append([image_2, keys_2])
 
                 training_data.append([image, keys])
                 # preview_image(image)
+            training_data = balance_data(training_data)
+            shuffle(training_data)
             np.save(PROCESSED_DATA_NPY_PATH.format(name_ctr), training_data)
             name_ctr += 1
         except Exception as e:

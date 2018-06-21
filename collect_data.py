@@ -105,7 +105,7 @@ def display_stats(training_data):
     print('Rights   :' + str(len(rights)))
 
 
-def process_img(original_img):
+def process_img(original_img, width=100, height=100):
     processed_img = original_img
     processed_img = cv2.Canny(processed_img, threshold1=100, threshold2=300)
     processed_img = roi(processed_img, [VERTICES])
@@ -114,7 +114,7 @@ def process_img(original_img):
 
     # processed_img = cv2.cvtColor(original_img, cv2.COLOR_RGB2GRAY)
     # processed_img = cv2.GaussianBlur(processed_img, (5, 5), 1)
-    processed_img = cv2.resize(processed_img, (100, 100))
+    processed_img = cv2.resize(processed_img, (width, height))
     # processed_img = cv2.cvtColor(processed_img, cv2.COLOR_BGR2RGB)
     return processed_img
 

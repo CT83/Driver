@@ -10,44 +10,15 @@ TRAINING_DATA_NPY_PATH = 'D:\Training Data\Driver/400_400 Approx Images/balanced
 WIDTH = 100
 HEIGHT = 100
 LR = 1e-3
-EPOCHS = 20
-MODEL_NAME = 'June_17_Model'
+EPOCHS = 30
+MODEL_NAME = 'June_20_Model_Data_Augmented_'
 
-PREV_MODEL = 'model_alexnet-702'
+PREV_MODEL = 'June_17_Model'
 
-LOAD_MODEL = True
+LOAD_MODEL = False
 hm_data = 5
 DATA_RANGE = 150
 VAL_SIZE=1000
-
-
-def balance_data(train_data):
-    lefts = []
-    rights = []
-    forwards = []
-
-    for data in train_data:
-        img = data[0]
-        choice = data[1]
-
-        if choice == [1, 0, 0]:
-            lefts.append([img, choice])
-        elif choice == [0, 1, 0]:
-            forwards.append([img, choice])
-        elif choice == [0, 0, 1]:
-            rights.append([img, choice])
-        else:
-            print('no matches')
-            input("Press Enter to continue...")
-
-    print("Lefts:", len(lefts), " Forwards:", len(forwards), " Rights:", len(rights))
-    forwards = forwards[:len(lefts)][:len(rights)]
-    lefts = lefts[:len(forwards)]
-    rights = rights[:len(forwards)]
-
-    final_data = forwards + lefts + rights
-    shuffle(final_data)
-    return final_data
 
 
 def combine_all_data(data_range=DATA_RANGE, data_path=PROCESSED_DATA_NPY_PATH):
@@ -73,7 +44,7 @@ def main():
     for epoch in range(EPOCHS):
         # for j in range(1, DATA_RANGE):
         try:
-            train_data = combine_all_data(data_range=7)
+            train_data = combine_all_data(data_range=16)
             print("Train Data Shape:", train_data.shape)
             shuffle(train_data)
             print("Training Data ", str(len(train_data)))
@@ -94,7 +65,8 @@ def main():
                       shuffle=True)
 
             print("Model Saved", epoch)
-            model.save(MODEL_NAME + str(epoch))
+            m_name = MODEL_NAME + str(epoch)
+            model.save(m_name)
         except NameError as e:
             print(e)
 
