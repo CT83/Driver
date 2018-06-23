@@ -3,8 +3,8 @@ from random import shuffle
 import numpy as np
 from cv2 import cv2
 
-WIDTH = 224
-HEIGHT = 224
+WIDTH = 100
+HEIGHT = 100
 LR = 1e-3
 EPOCHS = 3
 hm_data = 5
@@ -12,7 +12,7 @@ DATA_RANGE = 151
 PROCESS_BATCH_SIZE = 10
 
 TRAINING_DATA_NPY_PATH = 'D:\Training Data\Driver/400_400 Approx Images/training_data-{}.npy'
-PROCESSED_DATA_NPY_PATH = 'D:\Training Data\Driver/400_400 Approx Images/processed/training_data-{}.npy'
+PROCESSED_DATA_NPY_PATH = 'D:\Training Data\Driver/400_400 Approx Images/grayscale/training_data-{}.npy'
 
 
 def balance_data(train_data):

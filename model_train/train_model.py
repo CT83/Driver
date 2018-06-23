@@ -7,18 +7,17 @@ from training_data_mods.data_transform import PROCESSED_DATA_NPY_PATH
 
 TRAINING_DATA_NPY_PATH = 'D:\Training Data\Driver/400_400 Approx Images/balanced_shuffled_resized_100_100/training_data-{}.npy'
 
-WIDTH = 100
-HEIGHT = 100
+WIDTH = 224
+HEIGHT = 224
 LR = 1e-3
-EPOCHS = 30
-MODEL_NAME = 'June_20_Model_Data_Augmented_'
+EPOCHS = 18
+MODEL_NAME = 'June_21_Only_Grayscale_Same_ROI'
 
-PREV_MODEL = 'June_17_Model'
+PREV_MODEL = 'June_21_Only_Grayscale_Same_ROI12'
+LOAD_MODEL = True
 
-LOAD_MODEL = False
-hm_data = 5
-DATA_RANGE = 150
-VAL_SIZE=1000
+DATA_RANGE = 15
+VAL_SIZE = 1000
 
 
 def combine_all_data(data_range=DATA_RANGE, data_path=PROCESSED_DATA_NPY_PATH):
