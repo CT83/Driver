@@ -3,7 +3,8 @@ import time
 import cv2
 import numpy as np
 
-from collect_data import display_stats, process_img
+from collect_data import display_stats
+from training_data_mods.data_transform import process_img
 from temp.create_training_data import keys_to_output
 from sentdex.getkeys import key_check
 from sentdex.grabscreen import grab_screen

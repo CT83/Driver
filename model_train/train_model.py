@@ -7,16 +7,17 @@ from training_data_mods.data_transform import PROCESSED_DATA_NPY_PATH
 
 TRAINING_DATA_NPY_PATH = 'D:\Training Data\Driver/400_400 Approx Images/balanced_shuffled_resized_100_100/training_data-{}.npy'
 
-WIDTH = 224
-HEIGHT = 224
+WIDTH = 50
+HEIGHT = 50
 LR = 1e-3
-EPOCHS = 18
-MODEL_NAME = 'June_21_Only_Grayscale_Same_ROI'
+EPOCHS = 10
+MODEL_NAME = 'June_28_Model'
 
-PREV_MODEL = 'June_21_Only_Grayscale_Same_ROI12'
-LOAD_MODEL = True
+PREV_MODEL = 'June_28_Model8'
+# PREV_MODEL = 'June_21_Only_Grayscale_Same_ROI12'
+LOAD_MODEL = False
 
-DATA_RANGE = 15
+DATA_RANGE = 7
 VAL_SIZE = 1000
 
 
@@ -43,7 +44,8 @@ def main():
     for epoch in range(EPOCHS):
         # for j in range(1, DATA_RANGE):
         try:
-            train_data = combine_all_data(data_range=16)
+            train_data = combine_all_data(data_range=16,
+                                          data_path="D:\Training Data\Driver/400_400 Approx Images/balanced_shuffled_resized_100_100/training_data-{}.npy")
             print("Train Data Shape:", train_data.shape)
             shuffle(train_data)
             print("Training Data ", str(len(train_data)))

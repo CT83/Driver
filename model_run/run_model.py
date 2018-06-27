@@ -71,7 +71,7 @@ def main():
             print('loop took {} seconds'.format(time.time() - last_time))
             last_time = time.time()
 
-            from collect_data import process_img
+            from training_data_mods.data_transform import process_img
             screen = process_img(screen)
 
             cv2.imshow('Car Vision', screen)
