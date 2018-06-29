@@ -8,7 +8,6 @@ import numpy as np
 from cv2 import cv2
 
 from sentdex.getkeys import key_check
-from training_data_mods.data_transform import process_img
 
 BOX = (10, 25, 645, 510)
 VERTICES = np.array([[0, 300], [620, 300], [640, 400], [0, 400]])
@@ -38,6 +37,7 @@ def main():
         if not paused:
             from sentdex.grabscreen import grab_screen
             screen = grab_screen(region=BOX)
+            from training_data_mods.data_transform import process_img
             img = process_img(screen)
             cv2.imshow('window', cv2.resize(img, (300, 300)))
 
