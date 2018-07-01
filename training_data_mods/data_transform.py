@@ -72,17 +72,6 @@ def data_transform():
                 keys = frame_input[1]
                 image = process_img(image, width=WIDTH, height=HEIGHT)
 
-                # Augmentation
-                # if keys == [1, 0, 0] or keys == [0, 0, 1]:
-                #     image_2 = cv2.flip(image, 1)
-                #     if keys == [1, 0, 0]:
-                #         keys_2 = [0, 0, 1]
-                #     else:
-                #         keys_2 = [1, 0, 0]
-                #     training_data.append([image_2, keys_2])
-                #
-                # training_data.append([image, keys])
-
                 # preview_image(image)
                 training_data.append([image, keys])
             training_data = balance_data(training_data)
