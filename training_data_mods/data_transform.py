@@ -8,12 +8,12 @@ from collect_data import VERTICES
 
 WIDTH = 50
 HEIGHT = 50
-START_DATA = 6
-DATA_RANGE = 149
+START_SAVE_DATA = 2
+DATA_RANGE = 150
 PROCESS_BATCH_SIZE = 10
 
 TRAINING_DATA_NPY_PATH = 'D:\Driver/Training Data/Driver/400_400 Approx Images/training_data-{}.npy'
-PROCESSED_DATA_NPY_PATH = 'D:\Driver/Training Data/Driver/50_50 Long/training_data-{}.npy'
+PROCESSED_DATA_NPY_PATH = 'D:\Driver/Training Data/Driver/50_50 Long/balanced/training_data-{}.npy'
 
 
 def balance_data(train_data):
@@ -60,7 +60,7 @@ def combine_all_data(start_data_range=1, data_range=DATA_RANGE):
 
 
 def data_transform():
-    name_ctr = START_DATA
+    name_ctr = START_SAVE_DATA
     for j in range(1, DATA_RANGE, PROCESS_BATCH_SIZE):
         training_data = []
         try:
@@ -89,10 +89,6 @@ def preview_image(image):
         cv2.destroyAllWindows()
 
 
-if __name__ == '__main__':
-    data_transform()
-
-
 def process_img(original_img, width=100, height=100):
     processed_img = original_img
     processed_img = cv2.Canny(processed_img, threshold1=100, threshold2=300)
@@ -113,3 +109,7 @@ def roi(img, vertices):
     cv2.fillPoly(mask, vertices, 255)
     masked = cv2.bitwise_and(img, mask)
     return masked
+
+
+if __name__ == '__main__':
+    data_transform()

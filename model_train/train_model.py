@@ -5,17 +5,17 @@ import numpy as np
 from models.alexnet import alexnet
 from training_data_mods.data_transform import PROCESSED_DATA_NPY_PATH
 
-TRAINING_DATA_NPY_PATH = 'D:\Driver\Training Data\Driver/50_50 Long/training_data-{}.npy'
+training_data_npy_path = 'D:\Driver\Training Data\Driver/50_50 Long/balanced/training_data-{}.npy'
 
 WIDTH = 50
 HEIGHT = 50
 LR = 1e-3
-EPOCHS = 18
-# EPOCHS = 40
-MODEL_NAME = 'June_28_50_50'
+# EPOCHS = 18
+EPOCHS = 40
+MODEL_NAME = 'July_1_50_50'
 
 PREV_MODEL = 'June_28_50_5021'
-LOAD_MODEL = True
+LOAD_MODEL = False
 
 DATA_RANGE = 21
 VAL_SIZE = 1000
@@ -44,8 +44,8 @@ def main():
     for epoch in range(EPOCHS):
         # for j in range(1, DATA_RANGE):
         try:
-            train_data = combine_all_data(data_range=16,
-                                          data_path="D:\Driver\Training Data\Driver/50_50 Long/training_data-{}.npy")
+            train_data = combine_all_data(data_range=17,
+                                          data_path=training_data_npy_path)
             print("Train Data Shape:", train_data.shape)
             shuffle(train_data)
             print("Training Data ", str(len(train_data)))
