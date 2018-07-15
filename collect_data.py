@@ -10,7 +10,10 @@ from cv2 import cv2
 from sentdex.getkeys import key_check
 
 BOX = (10, 25, 645, 510)
-VERTICES = np.array([[0, 300], [620, 300], [640, 400], [0, 400]])
+# VERTICES = np.array([[10,500],[10,300], [300,200], [500,200], [800,300], [800,500]], np.int32)
+VERTICES = np.array([[0, 400], [0, 150], [400, 150], [400, 400]], np.int32)
+
+
 
 
 def keys_to_output(keys):

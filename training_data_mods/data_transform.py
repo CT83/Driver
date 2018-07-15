@@ -9,11 +9,15 @@ from collect_data import VERTICES
 WIDTH = 50
 HEIGHT = 50
 START_SAVE_DATA = 2
-DATA_RANGE = 150
+DATA_RANGE = 1050
 PROCESS_BATCH_SIZE = 10
 
-TRAINING_DATA_NPY_PATH = 'D:\Driver/Training Data/Driver/400_400 Approx Images/training_data-{}.npy'
-PROCESSED_DATA_NPY_PATH = 'D:\Driver/Training Data/Driver/50_50 Long/balanced/training_data-{}.npy'
+# TRAINING_DATA_NPY_PATH = 'D:\Driver/Training Data/Driver/400_400 Approx Images/training_data-{}.npy'
+TRAINING_DATA_NPY_PATH = \
+    'D:\MegaSync/Languages/Python/CT83-PC/Driver-Server/computer/training_data/training_data-{}.npy'
+# PROCESSED_DATA_NPY_PATH = 'D:\Driver/Training Data/Driver/50_50 Long/balanced/training_data-{}.npy'
+PROCESSED_DATA_NPY_PATH = \
+    'D:\MegaSync/Languages/Python/CT83-PC/Driver-Server/computer/training_data/processed/training_data-{}.npy'
 
 
 def balance_data(train_data):
@@ -33,7 +37,7 @@ def balance_data(train_data):
             rights.append([img, choice])
         else:
             print('no matches')
-            input("Press Enter to continue...")
+            # input("Press Enter to continue...")
 
     print("Lefts:", len(lefts), " Forwards:", len(forwards), " Rights:", len(rights))
     forwards = forwards[:len(lefts)][:len(rights)]
@@ -72,43 +76,61 @@ def data_transform():
                 keys = frame_input[1]
                 image = process_img(image, width=WIDTH, height=HEIGHT)
 
-                # preview_image(image)
+                preview_image(image)
+                print(keys)
+
                 training_data.append([image, keys])
             training_data = balance_data(training_data)
             shuffle(training_data)
             print("Saving ", PROCESSED_DATA_NPY_PATH.format(name_ctr))
-            np.save(PROCESSED_DATA_NPY_PATH.format(name_ctr), training_data)
+            # np.save(PROCESSED_DATA_NPY_PATH.format(name_ctr), training_data)
             name_ctr += 1
         except Exception as e:
             print(e)
 
 
-def preview_image(image):
-    cv2.imshow('window', image)
+def preview_image(image, name="window"):
+    cv2.imshow(name, cv2.resize(image, (400, 400)))
     if cv2.waitKey(3) & 0xFF == ord('q'):
         cv2.destroyAllWindows()
 
 
-def process_img(original_img, width=100, height=100):
-    processed_img = original_img
-    processed_img = cv2.Canny(processed_img, threshold1=100, threshold2=300)
-    # processed_img = cv2.cvtColor(original_img, cv2.COLOR_RGB2GRAY)
-    processed_img = roi(processed_img, [VERTICES])
-    # lines = cv2.HoughLinesP(processed_img, 1, np.pi / 180, 180, np.array([]), minLineLength=50, maxLineGap=600000)
-    # draw_lines(processed_img, lines)
+def process_camera_image(original_img):
+    process_image = original_img
+    process_image = cv2.flip(process_image, 0)  # Vertical Flip
+    # process_image = imutils.rotate(process_image, 90)
+    process_image = cv2.cvtColor(process_image, cv2.COLOR_BGR2RGB)
+    return process_image
 
-    # processed_img = cv2.cvtColor(original_img, cv2.COLOR_RGB2GRAY)
-    # processed_img = cv2.GaussianBlur(processed_img, (5, 5), 1)
-    processed_img = cv2.resize(processed_img, (width, height))
-    # processed_img = cv2.cvtColor(processed_img, cv2.COLOR_BGR2RGB)
+
+def process_img(original_img, width=640, height=640):
+    processed_img = process_camera_image(original_img)
+    # processed_img = cv2.Canny(processed_img, threshold1=25, threshold2=20)
+    processed_img = cv2.cvtColor(processed_img, cv2.COLOR_RGB2GRAY)
+
+    # processed_img = cv2.resize(processed_img, (width, height))
+    processed_img = region_of_interest(processed_img, [VERTICES])
+
     return processed_img
 
 
-def roi(img, vertices):
+def region_of_interest(img, vertices):
+    # defining a blank mask to start with
     mask = np.zeros_like(img)
-    cv2.fillPoly(mask, vertices, 255)
-    masked = cv2.bitwise_and(img, mask)
-    return masked
+
+    # defining a 3 channel or 1 channel color to fill the mask with depending on the input image
+    if len(img.shape) > 2:
+        channel_count = img.shape[2]  # i.e. 3 or 4 depending on your image
+        ignore_mask_color = (255,) * channel_count
+    else:
+        ignore_mask_color = 255
+
+    # filling pixels inside the polygon defined by "vertices" with the fill color
+    cv2.fillPoly(mask, vertices, ignore_mask_color)
+
+    # returning the image only where mask pixels are nonzero
+    masked_image = cv2.bitwise_and(img, mask)
+    return masked_image
 
 
 if __name__ == '__main__':
