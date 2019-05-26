@@ -1,11 +1,9 @@
 # Driver
 
-## [WIP]
-
 [Live Demo](https://youtu.be/ICIppxuDDL4?t=30s)
  ## Introduction
 Driver is an AI, wrote in Python using Tensorflow and OpenCV to drive cars in GTA San Andreas, though with little to no modifications this could be made to work for many other games too.
-#### 15 Nov 2017 - Current
+#### 15 Nov 2017 - June 2018
 
 ## Vision:
 * Making an AI Agent capable of driving a variety of cars using only images as inputs to the Neural Network.
@@ -17,8 +15,6 @@ Driver is an AI, wrote in Python using Tensorflow and OpenCV to drive cars in GT
 ## Command Line
 Run Tensorboard `tensorboard --logdir D:\MegaSync\Languages\Python\CT83-PC\Driver\Driver\model_train\logs\`
 
-## Conclusion
-Pending...
 
 
 ## References
